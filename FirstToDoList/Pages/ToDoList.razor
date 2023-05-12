@@ -1,18 +1,36 @@
 ﻿@page "/todolist"
 
-<PageTitle>Counter</PageTitle>
+<PageTitle>TODO List</PageTitle>
 
-<h1>Counter</h1>
+<h1>TODO List</h1>
 
-<p role="status">Current count: @currentCount</p>
+<p role="status">Current Lista:</p>
+<div class="col">
+        <button class="btn btn-primary" @onclick="AddTask">Add a Task</button>
+        <input type="text" id="task" name="task" @onclick="AddTask">
+</div>
+<div class="col col-md-4">
 
-<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
+<div class="col bg-info">
+    @foreach (var task in TaskList)
+    {
+        <div class="col">
+        <button class="btn btn-success" >Done</button>
+        <button class="btn btn-danger" >Remove</button>
+        <span class="bg-secondary">@task;</span>
+        </div>
+    }
+</div>
+</div>
 
 @code {
-    private int currentCount = 0;
+    private string task = " ";
+    private List<string> TaskList = new List<string>();
 
-    private void IncrementCount()
+    private void AddTask()
     {
-        currentCount++;
+       TaskList.Add(task);
     }
+    
+
 }
