@@ -6,31 +6,36 @@
 
 <p role="status">Current Lista:</p>
 <div class="col">
-        <button class="btn btn-primary" @onclick="AddTask">Add a Task</button>
-        <input type="text" id="task" name="task" @onclick="AddTask">
+    <button class="btn btn-primary" @onclick="AddTask">Add a Task</button>
+    <input type="text" id="task" name="task" @bind="task">
 </div>
 <div class="col col-md-4">
 
-<div class="col bg-info">
-    @foreach (var task in TaskList)
+<div class="col">
+    @foreach (string task in TaskList)
     {
         <div class="col">
-        <button class="btn btn-success" >Done</button>
-        <button class="btn btn-danger" >Remove</button>
-        <span class="bg-secondary">@task;</span>
+            <button class="btn btn-success" >Done</button>
+            <button class="btn btn-danger" >Remove</button>
+            <span class=""> @task</span>
         </div>
     }
 </div>
 </div>
 
 @code {
-    private string task = " ";
-    private List<string> TaskList = new List<string>();
+
+    private string task = "";
+    List<string> TaskList = new();
 
     private void AddTask()
     {
        TaskList.Add(task);
+       task = "";
     }
-    
+    protected override void OnInitialized()
+    {
+       TaskList.Add(task);
+    }
 
 }
