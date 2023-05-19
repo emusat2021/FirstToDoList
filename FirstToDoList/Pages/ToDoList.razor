@@ -1,4 +1,7 @@
 ﻿@page "/todolist"
+@using FirstToDoList.Services;
+@inject ToDoServices ToDoServices;
+
 
 <PageTitle>TODO List</PageTitle>
 
@@ -12,7 +15,7 @@
 <div class="col col-md-4">
 
 <div class="col">
-    @foreach (string task in TaskList)
+    @foreach (string task in model.ToDoList)
     {
         <div class="col">
             <button class="btn btn-success" >Done</button>
@@ -25,17 +28,18 @@
 
 @code {
 
-    private string task = "";
-    List<string> TaskList = new();
+    string task = "";
+    public ToDoListModel model = new();
 
-    private void AddTask()
+    private async Task AddTask()
     {
-       TaskList.Add(task);
+       model.ToDoList.Add(task);
+       await ToDoServices.ToDoListToMemory.AddRange(model.ToDoList);
        task = "";
     }
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
-       TaskList.Add(task);
+
     }
 
 }
