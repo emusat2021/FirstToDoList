@@ -1,5 +1,6 @@
 ﻿@page "/todolist"
 @using FirstToDoList.Services;
+@using FirstToDoListBlazor.Model;
 @inject ToDoServices ToDoServices;
 
 
@@ -18,8 +19,9 @@
     @foreach (string task in model.ToDoList)
     {
         <div class="col">
-            <button class="btn btn-success" >Done</button>
-            <button class="btn btn-danger" >Remove</button>
+            <button class="btn btn-outline-success" @onclick="SaveTask" >Save</button>
+            <button class="btn btn-outline-secondary" >Done</button>
+            <button class="btn btn-outline-danger" >Remove</button>
             <span class=""> @task</span>
         </div>
     }
@@ -27,18 +29,28 @@
 </div>
 
 @code {
+    public ToDoListModel model = new();
 
     string task = "";
-    public ToDoListModel model = new();
 
     private async Task AddTask()
     {
        model.ToDoList.Add(task);
-       await ToDoServices.ToDoListToMemory.AddRange(model.ToDoList);
+       //1) ToDoList A;
+       //2) ToDoList A, B;
+       await ToDoServices.Save(model);
+       //1) MemoryList A;
+       //2)MemoryList A; addrange /ToDoList A, B;
+
        task = "";
     }
-    protected override async Task OnInitializedAsync()
+    private void SaveTask()
     {
+        model.ToDoList.Add(task);
+    }
+    protected override void OnInitialized()
+    {
+        model.ToDoList = ToDoServices.ToDoListToMemory;
 
     }
 

@@ -8,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
+//Singleton and Service can be used to save in memory if is choosed in stead of ex.DB;
 builder.Services.AddSingleton<ToDoServices>();
 
 
