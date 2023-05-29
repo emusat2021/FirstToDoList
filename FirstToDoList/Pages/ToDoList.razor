@@ -18,12 +18,15 @@
 <div class="col">
     @foreach (string task in model.ToDoList)
     {
+        @if(task != "" && task==task)
+        {
         <div class="col">
             <button class="btn btn-outline-success" @onclick="SaveTask" >Save</button>
             <button class="btn btn-outline-secondary" >Done</button>
             <button class="btn btn-outline-danger" >Remove</button>
             <span class=""> @task</span>
         </div>
+        }
     }
 </div>
 </div>
@@ -31,11 +34,13 @@
 @code {
     public ToDoListModel model = new();
 
-    string task = "";
+    string task;
 
     private async Task AddTask()
     {
-       model.ToDoList.Add(task);
+       if(task != "" && task==task)
+       {
+        model.ToDoList.Add(task);
        //1) ToDoList A;
        //2) ToDoList A, B;
        await ToDoServices.Save(model);
@@ -43,6 +48,7 @@
        //2)MemoryList A; addrange /ToDoList A, B;
 
        task = "";
+       }
     }
     private void SaveTask()
     {
@@ -50,8 +56,7 @@
     }
     protected override void OnInitialized()
     {
-        model.ToDoList = ToDoServices.ToDoListToMemory;
-
+        ToDoServices.Load(model);
     }
 
 }
