@@ -1,4 +1,4 @@
-﻿@page "/todolist"
+@page "/todolist"
 @using FirstToDoList.Services;
 @using FirstToDoListBlazor.Model;
 @inject ToDoServices ToDoServices;
@@ -38,14 +38,12 @@
 
     private async Task AddTask()
     {
-        model.ToDoList.Add(task);
-       //1) ToDoList A;
-       //2) ToDoList A, B;
-       await ToDoServices.Save(model);
-       //1) MemoryList A;
-       //2)MemoryList A; addrange /ToDoList A, B;
-
-       task = "";
+        if(!model.ToDoList.Contains(task))
+        {
+            model.ToDoList.Add(task);
+        }
+        await ToDoServices.Save(model);
+        task = "";
     }
     private void SaveTask()
     {
