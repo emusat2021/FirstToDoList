@@ -3,7 +3,7 @@ namespace FirstToDoList.Services;
 
     public class ToDoServices
     {
-        private List<string> ToDoListToMemory {get; set; } = new ();
+        private HashSet<string> ToDoListToMemory {get; set; } = new ();
         public async Task Load(ToDoListModel model)
         {
             model.ToDoList = ToDoListToMemory;
