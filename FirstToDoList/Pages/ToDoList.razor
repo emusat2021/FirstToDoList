@@ -18,7 +18,7 @@
 <div class="col">
     @foreach (string task in model.ToDoList)
     {
-        @if(task != "" && task==task)
+        @if(!string.IsNullOrWhiteSpace(task))
         {
         <div class="col">
             <button class="btn btn-outline-success" @onclick="SaveTask" >Save</button>
@@ -38,8 +38,6 @@
 
     private async Task AddTask()
     {
-       if(task != "" && task==task)
-       {
         model.ToDoList.Add(task);
        //1) ToDoList A;
        //2) ToDoList A, B;
@@ -48,7 +46,6 @@
        //2)MemoryList A; addrange /ToDoList A, B;
 
        task = "";
-       }
     }
     private void SaveTask()
     {
