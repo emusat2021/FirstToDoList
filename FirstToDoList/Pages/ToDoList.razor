@@ -44,7 +44,12 @@
         }
         await ToDoServices.Save(model);
         task = "";
-    }
+    private void RemoveTask(string task)
+    {
+        model.ToDoList.Remove(task);
+        ToDoServices.Save(model);
+
+    }    
     private void SaveTask()
     {
         model.ToDoList.Add(task);
