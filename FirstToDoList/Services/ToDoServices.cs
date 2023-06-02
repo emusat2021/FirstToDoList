@@ -4,9 +4,18 @@ namespace FirstToDoList.Services;
     public class ToDoServices
     {
         private List<string> ToDoListInDataBase {get; set; } = new ();
+        
+        //save user's data to db
+        public async Task Save(ToDoListModel toDoListModel)
+        {
+            
+            ToDoListInDataBase.Clear();
+            ToDoListInDataBase.AddRange(toDoListModel.ToDoList);
+        }
+        //db to user
         public async Task GetListFromDB(ToDoListModel model)
         {
-            //db to user
+            
             //model.ToDoList := ToDoListToMemory;
             //model.ToDoList <= ToDoListToMemory;
             //"=" and "=="
@@ -14,12 +23,6 @@ namespace FirstToDoList.Services;
 
             model.ToDoList.Clear();
             model.ToDoList.AddRange(ToDoListInDataBase);
-        }
-        public async Task Save(ToDoListModel toDoListModel)
-        {
-            //save user's data to db
-            ToDoListInDataBase.Clear();
-            ToDoListInDataBase.AddRange(toDoListModel.ToDoList);
         }
         
         
