@@ -1,4 +1,4 @@
-@page "/todolist"
+﻿@page "/todolist"
 @using FirstToDoList.Services;
 @using FirstToDoListBlazor.Model;
 @inject ToDoServices ToDoServices;
@@ -8,27 +8,25 @@
 
 <h1>TODO List</h1>
 
-<p role="status">Current Lista:</p>
+<p role="status">Current List:</p>
 <div class="col">
     <button class="btn btn-primary" @onclick="AddTask">Add a Task</button>
     <input type="text" id="task" name="task" @bind="task">
 </div>
 <div class="col col-md-4">
-
-<div class="col">
-    @foreach (string task in model.ToDoList)
-    {
-        @if(!string.IsNullOrWhiteSpace(task))
+    <div class="col">
+        @foreach (string task in model.ToDoList)
         {
-        <div class="col">
-            <button class="btn btn-outline-success" @onclick="SaveTask" >Save</button>
-            <button class="btn btn-outline-secondary" >Done</button>
-            <button class="btn btn-outline-danger" >Remove</button>
-            <span class=""> @task</span>
-        </div>
+            @if(!string.IsNullOrWhiteSpace(task))
+            {
+                <div class="col">
+                    <button class="btn btn-outline-success" >Done</button>
+                    <button class="btn btn-outline-danger" @onclick=@(_ =>RemoveTask(task))>Remove</button>
+                    <TextBlock class=""> @task</TextBlock>
+                </div>
+            }
         }
-    }
-</div>
+    </div>
 </div>
 
 @code {
@@ -44,10 +42,12 @@
         }
         await ToDoServices.Save(model);
         task = "";
-    private void RemoveTask(string task)
+    }
+
+    private async Task RemoveTask(string task)
     {
         model.ToDoList.Remove(task);
-        ToDoServices.Save(model);
+        await ToDoServices.Save(model);
 
     }    
     private void SaveTask()
@@ -56,7 +56,11 @@
     }
     protected override void OnInitialized()
     {
-        ToDoServices.Load(model);
+        ToDoServices.GetListFromDB(model);
     }
 
 }
+       @* task = "<del style=text-decoration:line-through>task</del>"; *@
+       @* task.Attributes.Add("task", "text-decoration: line-through;"); *@
+       @* task = task.Style["text-decoration"] = "line-through"; *@
+       @* model.ToDoList.Add(<span style=text-decoration: line-through> @task</span>); *@
