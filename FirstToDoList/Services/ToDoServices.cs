@@ -4,9 +4,10 @@ namespace FirstToDoList.Services;
     public class ToDoServices
     {
         private List<string> ToDoListToMemory {get; set; } = new ();
-        public async Task Load(ToDoListModel model)
+        public async Task GetListFromDB(ToDoListModel model)
         {
-            model.ToDoList = ToDoListToMemory;
+            //db to user
+            //model.ToDoList := ToDoListToMemory;
         }
         public async Task Save(ToDoListModel toDoListModel)
         {
