@@ -8,11 +8,14 @@
 
 <h1>TODO List</h1>
 
-<p role="status">Current List:</p>
+<span class="" role="status"> <em>Please Add a task to your ToDo List:</em></span>
 <div class="col">
     <button class="btn btn-primary" @onclick="AddTask">Add a Task</button>
-    <input type="text" id="task" name="task" @bind="task">
+    <input type="text"  id="task" name="task" @bind="task">
 </div>
+<hr>
+<span class="" role="status"><em>ToDo List:</em></span>
+
 <div class="col col-md-4">
     <div class="col">
         @foreach (string task in model.ToDoList)
