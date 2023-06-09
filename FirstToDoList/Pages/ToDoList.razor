@@ -1,12 +1,10 @@
 ﻿@page "/todolist"
+@using System.ComponentModel.DataAnnotations;
 @using FirstToDoList.Services
 @using FirstToDoListBlazor.Model
 @using FirstToDoListBlazor.Components
 @inject ToDoServices ToDoServices
 
-
-<EditForm Model="@model" OnValidSubmit="SubmitForm">
-    <DataAnnotationsValidator /> 
 <PageTitle>TODO List</PageTitle>
 
 <h1>TODO List</h1>
@@ -36,21 +34,16 @@
                     <span>@task</span>
                 </div>
             }
-            else
-            {
-                <ModalDialog Title="Warning" Text="You need to insert a name for your task" OnClose="@OnDeleteDialogClose"></ModalDialog>
-            }
-
-
-        }
+       }
     </div>
 </div>
 </div>
 
-</EditForm>
 @code {
     public ToDoListModel model = new();
 
+    [Required]
+    [StringLength(100, ErrorMessage = "Task name is too long")]
     string task;
     public bool DeleteDialogOpen {get; set; }
     private void OnDeleteDialogClose(bool accepted)
@@ -89,13 +82,5 @@
     {
         await ToDoServices.GetListFromDB(model);
     }
-    private async Task SubmitForm()
-    {
-
-    }
-
 }
-       @* task = "<del style=text-decoration:line-through>task</del>"; *@
-       @* task.Attributes.Add("task", "text-decoration: line-through;"); *@
-       @* task = task.Style["text-decoration"] = "line-through"; *@
-       @* model.ToDoList.Add(<span style=text-decoration: line-through> @task</span>); *@
+    
