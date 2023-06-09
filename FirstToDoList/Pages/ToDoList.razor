@@ -1,42 +1,68 @@
 ﻿@page "/todolist"
-@using FirstToDoList.Services;
-@using FirstToDoListBlazor.Model;
-@inject ToDoServices ToDoServices;
+@using FirstToDoList.Services
+@using FirstToDoListBlazor.Model
+@using FirstToDoListBlazor.Components
+@inject ToDoServices ToDoServices
 
 
+<EditForm Model="@model" OnValidSubmit="SubmitForm">
+    <DataAnnotationsValidator /> 
 <PageTitle>TODO List</PageTitle>
 
 <h1>TODO List</h1>
 
-<span class="" role="status"> <em>Please Add a task to your ToDo List:</em></span>
-<div class="col">
-    <button class="btn btn-primary" @onclick="AddTask">Add a Task</button>
-    <input type="text"  id="task" name="task" @bind="task">
-</div>
-<hr>
-<span class="" role="status"><em>ToDo List:</em></span>
+<span class="" role="status"> <em>Here you can add a task to your ToDo List:</em></span>
 
+    <div class="form-group">
+    <div class="col">
+        <button class="btn btn-primary" @onclick="AddTask">Add a Task</button>
+        <InputText type="text" id="task" name="task" @bind-Value="task"/>
+    </div>
+    </div>
+
+<hr>
+
+<span class="" role="status"><em>ToDo List:</em></span>
+<div class="form-group">
 <div class="col col-md-4">
     <div class="col">
         @foreach (string task in model.ToDoList)
         {
-            @if(!string.IsNullOrWhiteSpace(task))
+            @if(!string.IsNullOrWhiteSpace(task) && !task.All(Char.IsDigit))
             {
                 <div class="col">
                     <button class="btn btn-outline-success" >Done</button>
                     <button class="btn btn-outline-danger" @onclick=@(_ =>RemoveTask(task))>Remove</button>
-                    <TextBlock class=""> @task</TextBlock>
+                    <span>@task</span>
                 </div>
             }
+            else
+            {
+                <ModalDialog Title="Warning" Text="You need to insert a name for your task" OnClose="@OnDeleteDialogClose"></ModalDialog>
+            }
+
+
         }
     </div>
 </div>
+</div>
 
+</EditForm>
 @code {
     public ToDoListModel model = new();
 
     string task;
-
+    public bool DeleteDialogOpen {get; set; }
+    private void OnDeleteDialogClose(bool accepted)
+    {
+        DeleteDialogOpen = false;
+        StateHasChanged();
+    }
+    private void OpenDeleteDialog()
+    {
+        DeleteDialogOpen = true;
+        StateHasChanged();
+    }
     private async Task AddTask()
     {
         if(!model.ToDoList.Contains(task))
@@ -57,9 +83,15 @@
     {
         model.ToDoList.Add(task);
     }
+    
+
     protected async override Task OnInitializedAsync()
     {
         await ToDoServices.GetListFromDB(model);
+    }
+    private async Task SubmitForm()
+    {
+
     }
 
 }
