@@ -3,7 +3,7 @@ namespace FirstToDoList.Services;
 
     public class ToDoServices
     {
-        private List<string> ToDoListInDataBase {get; set; } = new ();
+        private List<ToDoListEntry> ToDoListInDataBase {get; set; } = new ();
         
         //save user's data to db
         public async Task Save(ToDoListModel toDoListModel)

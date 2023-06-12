@@ -32,14 +32,14 @@
 <div class="form-group">
 <div class="col col-md-4">
     <div class="col">
-        @foreach (string task in model.ToDoList)
+        @foreach (var toDoListEntry in model.ToDoList)
         {
             @* @if(!string.IsNullOrWhiteSpace(task) && !task.All(Char.IsDigit))
             { *@
                 <div class="col">
                     <button class="btn btn-outline-success" >Done</button>
-                    <button class="btn btn-outline-danger" @onclick=@(_ =>RemoveTask(task))>Remove</button>
-                    <span>@task</span>
+                    <button class="btn btn-outline-danger" @onclick=@(_ =>RemoveTask(toDoListEntry.TaskName))>Remove</button>
+                    <span>@toDoListEntry.TaskName</span>
                 </div>
             @* } *@
        }
@@ -56,9 +56,12 @@
     
     private async Task AddTask()
     {
-        if(!model.ToDoList.Contains(task)&& !string.IsNullOrWhiteSpace(task) && !task.All(Char.IsDigit))
+        if(!model.ToDoList.Any( entry => entry.TaskName == task)&& !string.IsNullOrWhiteSpace(task) && !task.All(Char.IsDigit))
         {
-            model.ToDoList.Add(task);
+            var toDoListEntry = new ToDoListEntry();
+            toDoListEntry.TaskName = task;
+            model.ToDoList.Add(toDoListEntry);
+    
             errorMessage="";
         }
         else
@@ -72,15 +75,10 @@
 
     private async Task RemoveTask(string task)
     {
-        model.ToDoList.Remove(task);
+        model.ToDoList.RemoveAll(entry => entry.TaskName == task);
         await ToDoServices.Save(model);
 
     }    
-    private void SaveTask()
-    {
-        model.ToDoList.Add(task);
-    }
-    
 
     protected async override Task OnInitializedAsync()
     {
