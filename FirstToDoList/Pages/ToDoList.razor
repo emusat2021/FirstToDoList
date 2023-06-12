@@ -15,7 +15,15 @@
     <div class="col">
         <button class="btn btn-primary" @onclick="AddTask">Add a Task</button>
         <InputText type="text" id="task" name="task" @bind-Value="task"/>
+        
     </div>
+    @if(errorMessage!="")
+    {
+    <div>
+        @errorMessage
+    </div>
+
+    }
     </div>
 
 <hr>
@@ -26,14 +34,14 @@
     <div class="col">
         @foreach (string task in model.ToDoList)
         {
-            @if(!string.IsNullOrWhiteSpace(task) && !task.All(Char.IsDigit))
-            {
+            @* @if(!string.IsNullOrWhiteSpace(task) && !task.All(Char.IsDigit))
+            { *@
                 <div class="col">
                     <button class="btn btn-outline-success" >Done</button>
                     <button class="btn btn-outline-danger" @onclick=@(_ =>RemoveTask(task))>Remove</button>
                     <span>@task</span>
                 </div>
-            }
+            @* } *@
        }
     </div>
 </div>
@@ -42,26 +50,22 @@
 @code {
     public ToDoListModel model = new();
 
-    [Required]
-    [StringLength(100, ErrorMessage = "Task name is too long")]
     string task;
-    public bool DeleteDialogOpen {get; set; }
-    private void OnDeleteDialogClose(bool accepted)
-    {
-        DeleteDialogOpen = false;
-        StateHasChanged();
-    }
-    private void OpenDeleteDialog()
-    {
-        DeleteDialogOpen = true;
-        StateHasChanged();
-    }
+
+    string errorMessage="";
+    
     private async Task AddTask()
     {
-        if(!model.ToDoList.Contains(task))
+        if(!model.ToDoList.Contains(task)&& !string.IsNullOrWhiteSpace(task) && !task.All(Char.IsDigit))
         {
             model.ToDoList.Add(task);
+            errorMessage="";
         }
+        else
+        {
+            errorMessage = "Your task name is invalid";
+        }
+
         await ToDoServices.Save(model);
         task = "";
     }

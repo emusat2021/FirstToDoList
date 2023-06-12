@@ -8,7 +8,7 @@ namespace FirstToDoList.Services;
         //save user's data to db
         public async Task Save(ToDoListModel toDoListModel)
         {
-            
+            Console.WriteLine(String.Join(", ", toDoListModel.ToDoList));
             ToDoListInDataBase.Clear();
             ToDoListInDataBase.AddRange(toDoListModel.ToDoList);
         }
