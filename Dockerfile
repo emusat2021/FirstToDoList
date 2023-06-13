@@ -24,4 +24,4 @@ FROM mcr.microsoft.com/dotnet/aspnet:7.0 AS runtime
 WORKDIR /app
 COPY --from=build /app/FirstToDoList/out ./
 EXPOSE 80
-ENTRYPOINT ["dotnet", "FirstToDoList.dll"]
+ENTRYPOINT ["dotnet", "FirstToDoListBlazor.dll"]
