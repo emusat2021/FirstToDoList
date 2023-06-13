@@ -20,7 +20,7 @@
     @if(errorMessage!="")
     {
     <div>
-        @errorMessage
+       <span class="badge bg-warning text-dark"> @errorMessage </span>
     </div>
 
     }
@@ -34,14 +34,11 @@
     <div class="col">
         @foreach (var toDoListEntry in model.ToDoList)
         {
-            @* @if(!string.IsNullOrWhiteSpace(task) && !task.All(Char.IsDigit))
-            { *@
-                <div class="col">
-                    <button class="btn btn-outline-success" >Done</button>
-                    <button class="btn btn-outline-danger" @onclick=@(_ =>RemoveTask(toDoListEntry.TaskName))>Remove</button>
-                    <span>@toDoListEntry.TaskName</span>
-                </div>
-            @* } *@
+            <div class="col">
+                <button class="btn btn-outline-success" >Done</button>
+                <button class="btn btn-outline-danger" @onclick=@(_ =>RemoveTask(toDoListEntry.TaskName))>Remove</button>
+                <span>@toDoListEntry.TaskName</span>
+            </div>
        }
     </div>
 </div>
