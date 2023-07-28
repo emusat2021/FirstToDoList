@@ -35,9 +35,26 @@
         @foreach (var toDoListEntry in model.ToDoList)
         {
             <div class="col">
-                <button class="btn btn-outline-success" >Done</button>
+                @if(toDoListEntry.DoneTask)
+                {
+                    <button class="btn btn-outline-success" @onclick=@(_ =>ToggleDone(toDoListEntry.TaskName))>NotDone</button>
+                }
+                else
+                {
+                    <button class="btn btn-outline-success" @onclick=@(_ =>ToggleDone(toDoListEntry.TaskName)) >Done</button>
+                }
                 <button class="btn btn-outline-danger" @onclick=@(_ =>RemoveTask(toDoListEntry.TaskName))>Remove</button>
-                <span>@toDoListEntry.TaskName</span>
+                @if(toDoListEntry.DoneTask)
+                {
+                    <span style="text-decoration: line-through;">@toDoListEntry.TaskName</span>
+
+                }
+                else
+                {
+                    <span >@toDoListEntry.TaskName</span>
+                }
+
+
             </div>
        }
     </div>
@@ -57,6 +74,7 @@
         {
             var toDoListEntry = new ToDoListEntry();
             toDoListEntry.TaskName = task;
+            toDoListEntry.DoneTask = false;
             model.ToDoList.Add(toDoListEntry);
     
             errorMessage="";
@@ -72,10 +90,25 @@
 
     private async Task RemoveTask(string task)
     {
+        // entry intererate in the list.
+        // If the expression entry.TaskName == is true then Remove the specific entry
         model.ToDoList.RemoveAll(entry => entry.TaskName == task);
         await ToDoServices.Save(model);
 
-    }    
+    }
+    private async Task ToggleDone(string task)
+    {
+        foreach(var element in model.ToDoList)
+        {
+            if(element.TaskName == task)
+            {
+                element.DoneTask = !element.DoneTask;
+            }
+
+        }
+        await ToDoServices.Save(model);
+
+    }  
 
     protected async override Task OnInitializedAsync()
     {
