@@ -11,6 +11,7 @@ RUN dotnet restore
 # RUN dotnet restore
 
 WORKDIR /app
+# first "FirstToDoList" is source and the next is destination (EM)
 COPY FirstToDoList FirstToDoList
 # COPY Tracker.Order.Web.Tests Tracker.Order.Web.Tests
 
