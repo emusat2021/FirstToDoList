@@ -9,19 +9,19 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-//Singleton and Service can be used to save in memory if is choosed in stead of ex.DB;
-builder.Services.AddSingleton<ToDoServicesMemory>();
 
-var connectionString = "Host=127.0.0.1;Port=5432;Username=postgres;Password=123456;Database=FirstToDoListMemory";
 
+var connectionString = "Host=container-todo;Port=80;Username=todolist-memory;Password=123456;Database=FirstToDoListMemory";
+
+builder.Services.AddTransient<Database>(_=>new Database(connectionString));
+builder.Services.AddSingleton<ToDoServicePGAdmin>();
 
 var database = new Database(connectionString);
 database.EnsureJsonStandardTable(Tables.FirstToDoListMemory).Wait();
-builder.Services.AddTransient<Database>(x=>new Database(connectionString));
-
-builder.Services.AddSingleton<ToDoServicePGAdmin>();
 
 
+//Singleton and Service can be used to save in memory if is choosed in stead of ex.DB;
+// builder.Services.AddSingleton<ToDoServicesMemory>();
 
 var app = builder.Build();
 
