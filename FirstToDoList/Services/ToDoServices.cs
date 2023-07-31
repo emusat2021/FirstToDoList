@@ -1,29 +1,35 @@
+using Npgsql;
 using FirstToDoListBlazor.Model;
-namespace FirstToDoList.Services;
+using FirstToDoListBlazor.Infrastructure;
+namespace FirstToDoListBlazor.Services;
 
-    public class ToDoServices
+
+
+public class ToDoServicePGAdmin
+{
+    private Database database;
+
+    public ToDoServicePGAdmin(Database database)
     {
-        private List<ToDoListEntry> ToDoListInDataBase {get; set; } = new ();
-        
-        //save user's data to db
-        public async Task Save(ToDoListModel toDoListModel)
-        {
-            Console.WriteLine(String.Join(", ", toDoListModel.ToDoList));
-            ToDoListInDataBase.Clear();
-            ToDoListInDataBase.AddRange(toDoListModel.ToDoList);
-        }
-        //db to user
-        public async Task GetListFromDB(ToDoListModel model)
-        {
-            
-            //model.ToDoList := ToDoListToMemory;
-            //model.ToDoList <= ToDoListToMemory;
-            //"=" and "=="
-
-
-            model.ToDoList.Clear();
-            model.ToDoList.AddRange(ToDoListInDataBase);
-        }
-        
-        
+        this.database = database;
     }
+
+    public async Task Save(ToDoListModel toDoListModel)
+    {
+        await database.Save(Tables.FirstToDoListMemory, toDoListModel, n => n.Id);
+    }
+
+    public async Task<IEnumerable<ToDoListModel>> FindAll()
+    {
+        return await database.Get<ToDoListModel>($"SELECT data FROM {Tables.FirstToDoListMemory}");
+    }
+
+    public async Task<ToDoListModel?> FindById(string id)
+    {
+        var idParameter = new NpgsqlParameter("Id", id);
+        var models = await database.Get<ToDoListModel>
+        ($"SELECT data FROM {Tables.FirstToDoListMemory} WHERE id = @Id", new []{ idParameter });
+        return models.FirstOrDefault();
+    }
+}
+

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
-using FirstToDoList.Services;
+using FirstToDoListBlazor.Services;
+using FirstToDoListBlazor.Infrastructure;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,7 +10,17 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 //Singleton and Service can be used to save in memory if is choosed in stead of ex.DB;
-builder.Services.AddSingleton<ToDoServices>();
+builder.Services.AddSingleton<ToDoServicesMemory>();
+
+var connectionString = "Host=127.0.0.1;Port=5432;Username=postgres;Password=123456;Database=FirstToDoListMemory";
+
+
+var database = new Database(connectionString);
+database.EnsureJsonStandardTable(Tables.FirstToDoListMemory).Wait();
+builder.Services.AddTransient<Database>(x=>new Database(connectionString));
+
+builder.Services.AddSingleton<ToDoServicePGAdmin>();
+
 
 
 var app = builder.Build();
