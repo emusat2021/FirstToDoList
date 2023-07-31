@@ -11,7 +11,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 
 
-var connectionString = "Host=container-todo;Port=80;Username=todolist-memory;Password=123456;Database=FirstToDoListMemory";
+var connectionString = "Host=localpg-todo;Port=5432;Username=postgres;Password=123456;Database=FirstToDoListMemory";
 
 var database = new Database(connectionString);
 database.EnsureJsonStandardTable(Tables.FirstToDoListMemory).Wait();
