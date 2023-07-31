@@ -13,11 +13,12 @@ builder.Services.AddServerSideBlazor();
 
 var connectionString = "Host=container-todo;Port=80;Username=todolist-memory;Password=123456;Database=FirstToDoListMemory";
 
+var database = new Database(connectionString);
+database.EnsureJsonStandardTable(Tables.FirstToDoListMemory).Wait();
+
 builder.Services.AddTransient<Database>(_=>new Database(connectionString));
 builder.Services.AddSingleton<ToDoServicePGAdmin>();
 
-var database = new Database(connectionString);
-database.EnsureJsonStandardTable(Tables.FirstToDoListMemory).Wait();
 
 
 //Singleton and Service can be used to save in memory if is choosed in stead of ex.DB;
