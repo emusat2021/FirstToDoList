@@ -3,7 +3,6 @@
 @using FirstToDoListBlazor.Services;
 @using FirstToDoListBlazor.Model;
 @using FirstToDoListBlazor.Components;
-@inject ToDoServicesMemory toDoServicesMemory
 @inject ToDoServicePGAdmin toDoServicePGAdmin
 
 
@@ -69,13 +68,7 @@
     string task;
 
     string errorMessage="";
-    
-    @* public async void AddTaskPG(string task)
-    {
-        model.ToDoList.Add(task);
-        await toDoServicePGAdmin.Save(model);
-        task = " ";
-    } *@
+
     private async Task AddTask()
     {
         if(!model.ToDoList.Any( entry => entry.TaskName == task)&& !string.IsNullOrWhiteSpace(task) && !task.All(Char.IsDigit))
@@ -96,17 +89,10 @@
         task = "";
     }
 
-    private async Task RemoveTaskMemory(string task)
+    private async Task RemoveTask(string task)
     {
         // entry intererate in the list.
         // If the expression entry.TaskName == is true then Remove the specific entry
-        model.ToDoList.RemoveAll(entry => entry.TaskName == task);
-        await toDoServicesMemory.Save(model);
-
-    }
-    private async Task RemoveTask(string task)
-    {
-
         model.ToDoList.RemoveAll(entry => entry.TaskName == task);
         await toDoServicePGAdmin.Save(model);
 
