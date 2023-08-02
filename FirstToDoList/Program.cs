@@ -1,28 +1,32 @@
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
 using FirstToDoListBlazor.Services;
 using FirstToDoListBlazor.Infrastructure;
 
 
 var builder = WebApplication.CreateBuilder(args);
 
+var config = builder.Configuration
+    // .SetBasePath(Path.Combine(AppContext.BaseDirectory))
+    .AddIniFile("config.env", optional: true)
+    // .AddEnvironmentVariables()
+    .Build();
+
 // Add services to the container.
-builder.Services.AddRazorPages();
+builder.Services.AddRazorPages(options =>
+{
+    options.Conventions.AuthorizePage("/");
+});
 builder.Services.AddServerSideBlazor();
 
+var connectionString = config["DB_CONNECTION_STRING"];
 
-var connectionString = "Host=localpg-todo;Port=5432;Username=postgres;Password=123456;Database=FirstToDoListMemory";
+//Singleton and Service can be used to save in memory if is choosed in stead of ex.DB;
+// builder.Services.AddSingleton<ToDoServicesMemory>();
 
 var database = new Database(connectionString);
 database.EnsureJsonStandardTable(Tables.FirstToDoListMemory).Wait();
 
-builder.Services.AddTransient<Database>(_=>new Database(connectionString));
+builder.Services.AddTransient<Database>(x=>new Database(connectionString));
 builder.Services.AddSingleton<ToDoServicePGAdmin>();
-
-
-
-//Singleton and Service can be used to save in memory if is choosed in stead of ex.DB;
-// builder.Services.AddSingleton<ToDoServicesMemory>();
 
 var app = builder.Build();
 

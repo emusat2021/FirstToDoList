@@ -11,6 +11,10 @@
     <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="7.0.5" />
     <PackageReference Include="Npgsql" Version="7.0.4" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
+    
+  </ItemGroup>
+    <ItemGroup>
+    <None Update="config.env" CopyToOutputDirectory="Always" />
   </ItemGroup>
 
 </Project>
