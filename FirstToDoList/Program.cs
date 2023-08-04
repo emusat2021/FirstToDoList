@@ -19,9 +19,6 @@ builder.Services.AddServerSideBlazor();
 
 var connectionString = config["DB_CONNECTION_STRING"];
 
-//Singleton and Service can be used to save in memory if is choosed in stead of ex.DB;
-// builder.Services.AddSingleton<ToDoServicesMemory>();
-
 var database = new Database(connectionString);
 database.EnsureJsonStandardTable(Tables.FirstToDoListMemory).Wait();
 

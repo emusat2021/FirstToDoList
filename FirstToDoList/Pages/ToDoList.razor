@@ -91,8 +91,6 @@
 
     private async Task RemoveTask(string task)
     {
-        // entry intererate in the list.
-        // If the expression entry.TaskName == is true then Remove the specific entry
         model.ToDoList.RemoveAll(entry => entry.TaskName == task);
         await toDoServicePGAdmin.Save(model);
 
