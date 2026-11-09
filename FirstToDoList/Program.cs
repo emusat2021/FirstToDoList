@@ -7,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 var config = builder.Configuration
     // .SetBasePath(Path.Combine(AppContext.BaseDirectory))
     .AddIniFile("config.env", optional: true)
-    // .AddEnvironmentVariables()
+    .AddEnvironmentVariables()
     .Build();
 
 // Add services to the container.
